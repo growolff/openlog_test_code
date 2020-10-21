@@ -7,11 +7,12 @@
   want to use OpenLog with an Uno or other platform capable of softwareSerial.
 
   Connect the following OpenLog to Arduino:
-  RXI of OpenLog to pin 5 on Arduino
-  VCC to 5V
+  RXI of OpenLog to pin 7 on Arduino
+  VCC to 5V 
   GND to GND
+  GRN to pin 4
 
-  This example records whatever the user OpenLog.prints(). This uses software serial on pin 5 instead
+  This example records whatever the user OpenLog.prints(). This uses software serial on pin 7 instead
   of hardware serial (TX/RX pins). Nearly any pin can be used for software serial.
 */
 
@@ -25,7 +26,7 @@ SoftwareSerial OpenLog(6, 7); // 6 -> Soft RX pin, 7 -> Soft TX pin
 // pin del led integrado en el arduino para debugueo
 int statLED = 13;
 
-// pin para reinicar el OpenLog
+// pin para reiniciar el OpenLog conectado al pin GRN 
 int resetOpenLog = 4;
 
 // contador de ciclos
@@ -36,7 +37,7 @@ int exitChar = 36;
 
 // variables para configurar nombre del archivo a escribir y para los mensajes que se enviaran
 char fileName[18];
-char _buffer[18];
+char ol_buffer[18];
 
 void setup() {
   pinMode(statLED, OUTPUT);
@@ -67,12 +68,13 @@ void setup() {
   // envia comandos al openlog para entrar al modo lecutra/escritura
   openlog_command_mode();
   Serial.println("Ready to receive commands");
-  blinkled();
+  blinkLed();
 
   // crea un nuevo archivo llamado 'LOGTIMER.csv'
   sprintf(fileName, "new LOGTIMER.csv\r");  
   OpenLog.print(fileName); //\r in string + regular print works with older v2.5 Openlogs
-  
+
+  // 
   sprintf(fileName, "append LOGTIMER.csv\r");
   OpenLog.print(fileName);
   Serial.println("Ready to get the real data");
@@ -80,10 +82,10 @@ void setup() {
 
 void loop() {  
   // escribe los datos al final del archivo 'LOGTIMER.csv'
-  sprintf(_buffer, "%d;%d;%d;%d",c,c,c,c);
-  OpenLog.println(_buffer);
+  sprintf(ol_buffer, "%d;%d;%d;%d",c,c,c,c);
+  OpenLog.println(ol_buffer);
 
-  Serial.println(_buffer);
+  Serial.println(ol_buffer);
 
   /*
   digitalWrite(statLED, HIGH);
@@ -113,7 +115,7 @@ void openlog_command_mode(){
   }
 }
 
-void blinkled() {
+void blinkLed() {
   for (int i = 0; i < 10; i++) {
     digitalWrite(statLED, 1);
     delay(50);
