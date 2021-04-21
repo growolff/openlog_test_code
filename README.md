@@ -12,6 +12,7 @@ links de referencia:
 * [ejemplo útil](https://www.hobbyist.co.nz/?q=openlog-serial-datalogger)
 
 1. conectar el openlog directamente al puerto serial mediante un USB to UART 3.3v de la siguiente forma
+
 | OpenLog | USB2UART   |
 |---------|------------|
 | GRN     | DTR        |
